@@ -2,47 +2,47 @@ clc, clear all, close all;
 
 load imgfiledata.mat;
 
-% Kullanýcýya dosya seçtirme iþlemi
-[dosya, dosyaYolu] = uigetfile({'*.jpg; *.bmp; *.tif; *.png'}, 'Bir görüntü seçin');
+% Kullaniciya dosya seÃ§tirme islemi
+[dosya, dosyaYolu] = uigetfile({'*.jpg; *.bmp; *.tif; *.png'}, 'Bir goruntu secin');
 
-% Dosya adý tam  haliyle oluþturuldu
+% Dosya adi tam  haliyle olusturuldu
 dosya = [dosyaYolu, dosya];
 
 goruntu = imread(dosya);
 
-[~, boyut] = size(goruntu);
+[, boyut] = size(goruntu);
 goruntu = imresize(goruntu, [300, 500]);
 
-% Eðer görüntü renkli ise gri ye çevir.
+% Eger goruntu renkli ise gri ye cevir.
 if size(goruntu, 3) == 3
     
     goruntu = rgb2gray(goruntu);
     
 end
 
-% Grilik seviyesine göre görüntüyü binary e çevirdik
+% Grilik seviyesine gore goruntuyu binary e cevirdik
 threshold = graythresh(goruntu);
 goruntu = imbinarize(goruntu, threshold);
 
 goruntuTersi = ~goruntu;
-figure, imshow(goruntu), title("Orjinal Görüntü");
-figure, imshow(goruntuTersi), title("Görüntünün Tersi");
+figure, imshow(goruntu), title("Orjinal Goruntu");
+figure, imshow(goruntuTersi), title("Goruntunun Tersi");
 
-% Gürültü temizleme iþlemleri
+% Gurultu temizleme islemleri
 if boyut > 2000
     goruntu1 = bwareaopen(goruntuTersi, 3500);
 else
     goruntu1 = bwareaopen(goruntuTersi, 3000);
 end
 
-figure, imshow(goruntu1), title("Temizlenmiþ Görüntü")
+figure, imshow(goruntu1), title("Temizlenmis Goruntu")
 
 goruntu2 = goruntuTersi -  goruntu1;
-figure, imshow(goruntu2), title("Çýkarýlmýþ Görüntü");
+figure, imshow(goruntu2), title("Cikarilmis Goruntu");
 
 
 goruntu2 = bwareaopen(goruntu2, 200);
-figure, imshow(goruntu2), title("Çýkarýlmýþ Görüntü 2");
+figure, imshow(goruntu2), title("Cikarilmis Goruntu 2");
 
 [etiketler, Nesneler] = bwlabel(goruntu2);
 nesneOzellikler = regionprops(etiketler, 'BoundingBox');
@@ -59,15 +59,15 @@ rectangle('Position', nesneOzellikler(n).BoundingBox, 'EdgeColor', 'g', 'LineWid
 end
 hold off
 
-%Tüm plaka deðerlerini finalCikis deðiþkeninde saklýyoruz
+%Tum plaka degerlerini finalCikis degiskeninde sakliyoruz
 finalCikis = [];
-% Her nesnenin max korelasyon deðerini tutar
+% Her nesnenin max korelasyon degerini tutar
 t = [];
-% Karakter sayýsýný bulduk
+% Karakter sayisini bulduk
 karakterSayisi = size(goruntuler, 2);
 
 for n=1: Nesneler
-% %   Etiketlenmiþ görüntüde karakter ara
+% %   Etiketlenmis goruntude karakter ara
 [r, c] = find(etiketler == n);
 karakter = goruntuTersi(min(r): max(r), min(c): max(c));
 karakter = imresize(karakter, [42, 24]);
@@ -77,8 +77,8 @@ pause(0.2);
 x = [];
 
 
-% elde ettiðimiz nesnenin  veritabanýndaki tüm karakterlerle kýyaslamasýný
-% yapýyoruz
+% elde ettigimiz nesnenin  veritabanindaki tÃ¼m karakterlerle kiyaslamasini
+% yapiyoruz
 for k=1: karakterSayisi
     y = corr2(goruntuler{1, k}, karakter);
     x = [x y];

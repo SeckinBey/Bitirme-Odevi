@@ -1,20 +1,20 @@
 clc, clear all, close all;
 
-% Dizini matlab ortamýna import edildi
+% Dizin matlab ortamina import edildi
 dizin = dir('EgitimGoruntuleri\');
 
-% Dosya adlarý
+% Dosya adlari
 dosyaAdlari = {dizin.name};
 
-% Görüntüleri alýyoruz (3 den baslayarak)
+% Goruntuleri aliyoruz (3 den baslayarak)
 dosyaAdlari = dosyaAdlari(3:end);
 
-% 2 satýr, 62(dosya sayýsý kadar) sütunlu bir cell veri tipi oluþturuldu
+% 2 satir, 62(dosya sayisi kadar) sÃ¼tunlu bir cell veri tipi olusturuldu
 goruntuler = cell(2, length(dosyaAdlari));
 
 for i=1:length(dosyaAdlari)
     
-    %Görüntüler cell tipinde 1.satýrýn tüm sütunlarýna ekleniyor     
+    %GÃ¶rÃ¼ntÃ¼ler cell tipinde 1.satirin tÃ¼m sÃ¼tunlarina ekleniyor     
     goruntuler(1, i) = {imread(['EgitimGoruntuleri', '\', cell2mat(dosyaAdlari(i))])};
     
     temp = cell2mat(dosyaAdlari(i));
@@ -22,4 +22,3 @@ for i=1:length(dosyaAdlari)
     
 end
 save('imgfiledata.mat', 'goruntuler')
-clear;
